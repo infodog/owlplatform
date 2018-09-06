@@ -10,9 +10,9 @@ services:
       - owl
 
   bookie1:
-    #build: bookkeeper
-    #image: 45157963/bookkeeper_pigeon
-    image: apache/bookkeeper:4.7.2
+    build: bookkeeper
+    image: 45157963/bookkeeper_pigeon
+#    image: apache/bookkeeper:4.7.2
     hostname: bookie1
     links:
       - zookeeper
@@ -21,7 +21,7 @@ services:
       - BK_zkServers=zookeeper:2181
       - BK_zkLedgersRootPath=/ledgers
       - BK_advertisedAddress=bookie1
-      - BK_dlogRootPath=pigeon40namespace
+      - BK_dlogRootPath=/pigeon40namespace
     volumes:
       - bookie1_journal:/journal
       - bookie1_ledgers:/ledgers
@@ -32,8 +32,8 @@ services:
 
 
   bookie2:
-    #image: 45157963/bookkeeper_pigeon
-    image: apache/bookkeeper:4.7.2
+    image: 45157963/bookkeeper_pigeon
+#    image: apache/bookkeeper:4.7.2
     hostname: bookie2
     links:
       - zookeeper
@@ -41,7 +41,7 @@ services:
       - JAVA_HOME=/usr/lib/jvm/jre-1.8.0
       - BK_zkServers=zookeeper:2181
       - BK_zkLedgersRootPath=/ledgers
-      - BK_dlogRootPath=pigeon40namespace
+      - BK_dlogRootPath=/pigeon40namespace
       - BK_advertisedAddress=bookie2
     volumes:
       - bookie2_journal:/journal
@@ -52,8 +52,8 @@ services:
       - owl
 
   bookie3:
-    #image: 45157963/bookkeeper_pigeon
-    image: apache/bookkeeper:4.7.2
+    image: 45157963/bookkeeper_pigeon
+#    image: apache/bookkeeper:4.7.2
     hostname: bookie3
     links:
       - zookeeper
@@ -61,7 +61,7 @@ services:
       - JAVA_HOME=/usr/lib/jvm/jre-1.8.0
       - BK_zkServers=zookeeper:2181
       - BK_zkLedgersRootPath=/ledgers
-      - BK_dlogRootPath=pigeon40namespace
+      - BK_dlogRootPath=/pigeon40namespace
       - BK_advertisedAddress=bookie3
     volumes:
       - bookie3_journal:/journal
