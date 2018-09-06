@@ -1,4 +1,4 @@
-FROM 45157963/nginx_base
+FROM centos
 
 MAINTAINER zxy@xinshi.net
 
