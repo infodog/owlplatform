@@ -51,7 +51,7 @@ function create_dlog_namespace() {
 function init_bookie() {
 
     # create dirs if they don't exist
-    create_bookie_dirs
+    #create_bookie_dirs
 
     # wait zookeeper to run
     wait_for_zookeeper
