@@ -1,72 +1,40 @@
 #!/usr/bin/env bash
-#
-#/**
-# * Copyright 2007 The Apache Software Foundation
-# *
-# * Licensed to the Apache Software Foundation (ASF) under one
-# * or more contributor license agreements.  See the NOTICE file
-# * distributed with this work for additional information
-# * regarding copyright ownership.  The ASF licenses this file
-# * to you under the Apache License, Version 2.0 (the
-# * "License"); you may not use this file except in compliance
-# * with the License.  You may obtain a copy of the License at
-# *
-# *     http://www.apache.org/licenses/LICENSE-2.0
-# *
-# * Unless required by applicable law or agreed to in writing, software
-# * distributed under the License is distributed on an "AS IS" BASIS,
-# * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# * See the License for the specific language governing permissions and
-# * limitations under the License.
-# */
-
-source /opt/bookkeeper/scripts/common.sh
-
-function wait_for_zookeeper() {
-    echo "wait for zookeeper"
-    until /opt/bookkeeper/bin/bookkeeper org.apache.zookeeper.ZooKeeperMain -server ${BK_zkServers} ls /; do sleep 5; done
-}
-
-function create_zk_root() {
-    echo "create the zk root dir for bookkeeper"
-    /opt/bookkeeper/bin/bookkeeper org.apache.zookeeper.ZooKeeperMain -server ${BK_zkServers} create ${BK_CLUSTER_ROOT_PATH}
-}
-
+echo "start entrypoint"
+PORT0=${PORT0:-${BOOKIE_PORT}}
+PORT0=${PORT0:-3181}
+BK_DATA_DIR=${BK_DATA_DIR:-"/data/bookkeeper"}
+BK_CLUSTER_ROOT_PATH=${BK_CLUSTER_ROOT_PATH:-""}
+export BK_HOME=/opt/bookkeeper
+export BK_bookiePort=${BK_bookiePort:-${PORT0}}
+export BK_zkServers=${BK_zkServers}
+export BK_zkLedgersRootPath=${BK_zkLedgersRootPath:-"${BK_CLUSTER_ROOT_PATH}/ledgers"}
+export BK_journalDirectory=${BK_journalDirectory:-${BK_DATA_DIR}/journal}
+export BK_ledgerDirectories=${BK_ledgerDirectories:-${BK_DATA_DIR}/ledgers}
+export BK_indexDirectories=${BK_indexDirectories:-${BK_DATA_DIR}/index}
+export BK_metadataServiceUri=${BK_metadataServiceUri:-"zk://${BK_zkServers}${BK_zkLedgersRootPath}"}
+export BK_dlogRootPath=${BK_dlogRootPath:-"${BK_CLUSTER_ROOT_PATH}/distributedlog"}
+python scripts/apply-config-from-env.py ${BK_HOME}/conf
+export BOOKIE_CONF=${BK_HOME}/conf/bk_server.conf
+export SERVICE_PORT=${PORT0}
+#wait for zookeeper
+until /opt/bookkeeper/bin/bookkeeper org.apache.zookeeper.ZooKeeperMain -server ${BK_zkServers} ls /; do sleep 5; done
+mkdir -p "${BK_journalDirectory}" "${BK_ledgerDirectories}" "${BK_indexDirectories}"
+echo "Created bookie dirs : "
+echo "  journal = ${BK_journalDirectory}"
+echo "  ledger = ${BK_ledgerDirectories}"
+echo "  index = ${BK_indexDirectories}"
+# -------------- #
+# Allow the container to be started with `--user`
+if [ "$(id -u)" = '0' ]; then
+    chown -R "${BK_USER}:${BK_USER}" "${BK_journalDirectory}" "${BK_ledgerDirectories}" "${BK_indexDirectories}"
+fi
+# -------------- #
+echo "create the zk root dir for bookkeeper"
+/opt/bookkeeper/bin/bookkeeper org.apache.zookeeper.ZooKeeperMain -server ${BK_zkServers} create ${BK_CLUSTER_ROOT_PATH}
 # Init the cluster if required znodes not exist in Zookeeper.
 # Use ephemeral zk node as lock to keep initialize atomic.
-function init_cluster() {
-    echo "init_cluster"
-    /opt/bookkeeper/bin/bookkeeper shell initnewcluster
-    echo "init_cluster result"
-    echo $?
-}
-
+/opt/bookkeeper/bin/bookkeeper shell initnewcluster
 # Create default dlog namespace
 # Use ephemeral zk node as lock to keep initialize atomic.
-function create_dlog_namespace() {
-    echo "create dlog namespace /opt/bookkeeper/bin/dlog admin bind -l ${BK_zkLedgersRootPath} -s ${BK_zkServers} -c distributedlog://${BK_zkServers}${BK_dlogRootPath}"
-   /opt/bookkeeper/bin/dlog admin bind -l ${BK_zkLedgersRootPath} -s ${BK_zkServers} -c distributedlog://${BK_zkServers}${BK_dlogRootPath}
-}
-
-function init_bookie() {
-
-    # create dirs if they don't exist
-    #create_bookie_dirs
-
-    # wait zookeeper to run
-    wait_for_zookeeper
-
-    # create zookeeper root
-    create_zk_root
-
-    # init the cluster
-    init_cluster
-
-    # create dlog namespace
-    create_dlog_namespace
-
-}
-
-init_bookie
-
+/opt/bookkeeper/bin/dlog admin bind -l ${BK_zkLedgersRootPath} -s ${BK_zkServers} -c distributedlog://${BK_zkServers}${BK_dlogRootPath}
 /opt/bookkeeper/bin/bookkeeper bookie
