@@ -30,7 +30,6 @@ services:
     networks:
       - owl
 
-
   bookie2:
     image: 45157963/bookkeeper_pigeon
 #    image: apache/bookkeeper:4.7.2
