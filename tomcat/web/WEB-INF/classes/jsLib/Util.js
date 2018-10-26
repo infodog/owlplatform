@@ -144,7 +144,7 @@ InfoscapeUtil.uploadEx = function (exts, maxsize) {
     $.uploadParams = JSON.parse("" + jParams.toString());
     var url = "" + InfoscapeUtil.api.Util.getInternalUrlFromFileId(fileInfo.getFileId(), "");
     var fileName =  "" + fileInfo.getName();
-    return {path:url,fileName:fileName};
+    return {path:url,fileName:fileName,fileId:"" + fileInfo.getFileId()};
 };
 
 /**
