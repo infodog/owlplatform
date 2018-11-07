@@ -11,7 +11,7 @@ services:
 
   bookie1:
     build: bookkeeper
-#    image: 45157963/bookkeeper_pigeon
+    image: 45157963/bookkeeper_pigeon
     image: apache/bookkeeper:4.8.0
     hostname: bookie1
     links:
@@ -31,9 +31,9 @@ services:
       - owl
 
   bookie2:
-#    image: 45157963/bookkeeper_pigeon
+    image: 45157963/bookkeeper_pigeon
 #    image: apache/bookkeeper:4.7.2
-    image: apache/bookkeeper:4.8.0
+#    image: apache/bookkeeper:4.8.0
     hostname: bookie2
     links:
       - zookeeper
@@ -52,8 +52,8 @@ services:
       - owl
 
   bookie3:
-    #image: 45157963/bookkeeper_pigeon
-    image: apache/bookkeeper:4.8.0
+    image: 45157963/bookkeeper_pigeon
+#    image: apache/bookkeeper:4.8.0
     hostname: bookie3
     links:
       - zookeeper
