@@ -13,8 +13,8 @@ export BK_ledgerDirectories=${BK_ledgerDirectories:-${BK_DATA_DIR}/ledgers}
 export BK_indexDirectories=${BK_indexDirectories:-${BK_DATA_DIR}/index}
 export BK_metadataServiceUri=${BK_metadataServiceUri:-"zk://${BK_zkServers}${BK_zkLedgersRootPath}"}
 export BK_dlogRootPath=${BK_dlogRootPath:-"${BK_CLUSTER_ROOT_PATH}/distributedlog"}
-python scripts/apply-config-from-env.py ${BK_HOME}/conf
-export BOOKIE_CONF=${BK_HOME}/conf/bk_server.conf
+python scripts/apply-config-from-env.py /opt/bookkeeper/conf
+export BOOKIE_CONF=/opt/bookkeeper/conf/bk_server.conf
 export SERVICE_PORT=${PORT0}
 #wait for zookeeper
 until /opt/bookkeeper/bin/bookkeeper org.apache.zookeeper.ZooKeeperMain -server ${BK_zkServers} ls /; do sleep 5; done
