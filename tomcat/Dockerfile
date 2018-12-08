@@ -16,4 +16,4 @@ ENV elasticSearchPass=changeme
 ENV Xmx=-Xmx4048M
 ENV SETUP_DIR=/usr/local/tomcat/setup
 
-ENV JAVA_OPTS="${Xmx} -XX:MaxPermSize=512m -Drhino.sourceDir=${debugDir} -agentlib:jdwp=transport=dt_socket,address=4046,suspend=n,server=y -Drhino.debug=true -DApiServer=${ApiServer} -Dsandbox=${SandBox} -DelasticSearchUrl=${elasticSearchUrl} -DelasticSearchUser=${elasticSearchUser} -DelasticSearchPass=${elasticSearchPass}" 
+ENV JAVA_OPTS="${Xmx} -XX:MaxPermSize=512m -Drhino.sourceDir=${debugDir} -agentlib:jdwp=transport=dt_socket,address=4046,suspend=n,server=y -Drhino.debug=true -Dhttps.protocols=TLSv1.1,TLSv1.2  -DApiServer=${ApiServer} -Dsandbox=${SandBox} -DelasticSearchUrl=${elasticSearchUrl} -DelasticSearchUser=${elasticSearchUser} -DelasticSearchPass=${elasticSearchPass}"
