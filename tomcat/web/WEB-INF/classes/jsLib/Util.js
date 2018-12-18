@@ -144,7 +144,7 @@ InfoscapeUtil.uploadEx = function (exts, maxsize) {
     $.uploadParams = JSON.parse("" + jParams.toString());
     var url = "" + InfoscapeUtil.api.Util.getInternalUrlFromFileId(fileInfo.getFileId(), "");
     var fileName =  "" + fileInfo.getName();
-    return {path:url,fileName:fileName,fileId:"" + fileInfo.getFileId()};
+    return {path:url,fileName:fileName,fileId:fileInfo.getFileId()};
 };
 
 /**
@@ -462,8 +462,8 @@ $.toString = function (value){
 
 var ESCAPE_REG = /["&'<>]/;
 function xmlEscape(content) {
-  const html = '' + content;
-  const regexResult = ESCAPE_REG.exec(html);
+  var html = '' + content;
+  var regexResult = ESCAPE_REG.exec(html);
   if (!regexResult) {
     return content;
   }
@@ -513,5 +513,11 @@ $escape = function(content){
 $string = function(s){
   return s;
 };
+
+$.xml2json = function(xml){
+    var json = InfoscapeUtil.api.Util.fromXml(xml);
+    var s = "" + json.toString();
+    return JSON.parse(s);
+}
 
 $.getParams();
