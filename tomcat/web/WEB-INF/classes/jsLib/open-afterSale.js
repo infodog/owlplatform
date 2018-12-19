@@ -37,6 +37,19 @@ OpenAfterSaleService.addReturnOrder = function (merchantId, returnOrderInfo, con
     return JSON.parse(json.toString());
 };
 
+/**
+ * 添加换货单
+ * @param createUserId
+ * @param barterOrderInfo
+ * @param config
+ * @returns {*}
+ */
+OpenAfterSaleService.addBarterOrder = function (createUserId, barterOrderInfo, config) {
+    var jBarterOrderInfo = $.JSONObject(barterOrderInfo);
+    var jConfig = $.JSONObject(config);
+    var json = OpenAfterSaleApi.BarterOrderAddUtil.addBarterOrder(merchantId, jBarterOrderInfo, jConfig);
+    return JSON.parse(json.toString());
+};
 
 /**
  * 添加退款单

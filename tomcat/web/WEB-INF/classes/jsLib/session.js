@@ -11,7 +11,7 @@ var SessionApi = new JavaImporter(
  * @namespace
  * @type {Object}
  */
-var session_key = {
+var SessionService = {
     /**
      * 添加和设置session值，如果sessionName不存在则添加，否则就修改原有的值
      * @param sessionName
