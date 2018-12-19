@@ -515,7 +515,7 @@ $string = function(s){
 };
 
 $.xml2json = function(xml){
-    var json = InfoscapeUtil.api.Util.fromXml(xml);
+    var json = InfoscapeUtil.api.Util.xml2json(xml);
     var s = "" + json.toString();
     return JSON.parse(s);
 }
