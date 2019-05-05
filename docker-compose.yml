@@ -11,7 +11,7 @@ services:
 
   bookie1:
     build: bookkeeper
-    image: 45157963/bookkeeper_pigeon
+#    image: 45157963/bookkeeper_pigeon
     image: apache/bookkeeper:4.8.0
     hostname: bookie1
     links:
