@@ -29,9 +29,15 @@
         }
 
         //用root来验证，如果密码不等于root的密码，则不能安装
-        int result = LoginUtil.loginByKey("root", deployPass, LoginUtil.TARGET_BACKEND);
-        if (result != IUserService.LOGIN_SUCCESSFUL) {
-            out.print("password error");
+//        int result = LoginUtil.loginByKey("root", deployPass, LoginUtil.TARGET_BACKEND);
+//        if (result != IUserService.LOGIN_SUCCESSFUL) {
+//            out.print("password error");
+//            return;
+//        }
+
+        String envDeployPass = System.getenv("deploypass");
+        if(!StringUtils.equals(deployPass,envDeployPass)){
+            out.print("password error.");
             return;
         }
 
